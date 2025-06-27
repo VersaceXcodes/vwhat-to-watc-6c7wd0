@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useCallback } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'react'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
-import axios from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'axios'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
-import { useQuery, useMutation, useQueryClient } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@tanstack/react-query'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // Import from the global Zustand store for lookup data and session management
-import { useAppStore, Genre, Mood, StreamingService, ContentDetails } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@/store/main'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+import { useAppStore, Genre, Mood, StreamingService, ContentDetails } from '@/store/main';
 
 // Define the base URL for API calls
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'http://localhost:3000'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}`;
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}`;
 
 // --- Type Definitions for Component State ---
 
 // Union type for Content Type selection
-type ContentType = '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Movie'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' | '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'TV Show'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' | '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Both'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+type ContentType = 'Movie' | 'TV Show' | 'Both';
 
 // Type for Recommendation Request Payload
 interface RecommendationRequestPayload {
@@ -54,7 +54,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
 
   // --- Local Component State ---
   const [preferences, setPreferences] = useState<UserPreferences>({
-    content_type: '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Both'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', // Default value
+    content_type: 'Both', // Default value
     selected_mood: null,
     selected_genres: [],
     selected_streaming_services: [],
@@ -68,7 +68,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
   // --- Initialization ---
   // Fetch initial data (genres, moods, services) and ensure session ID is set
   useEffect(() => {
-    // Only initialize if data isn'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'t already loaded or if there was a global error
+    // Only initialize if data isn't already loaded or if there was a global error
     if (!available_genres.length || !available_moods.length || !available_services.length) {
        initialize_app_state();
     }
@@ -83,7 +83,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
   const handleMoodChange = (moodName: string) => {
     setPreferences((prev) => ({ ...prev, selected_mood: moodName }));
     // Clear specific mood error if any, when mood is selected
-    if (recommendationError && recommendationError.includes('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'mood'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')) {
+    if (recommendationError && recommendationError.includes('mood')) {
         setRecommendationError(null);
     }
   };
@@ -96,7 +96,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
       return { ...prev, selected_genres: newGenres };
     });
     // Clear specific genre error if any, when a genre is selected/deselected
-    if (recommendationError && recommendationError.includes('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'genre'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')) {
+    if (recommendationError && recommendationError.includes('genre')) {
         setRecommendationError(null);
     }
   };
@@ -109,7 +109,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
       return { ...prev, selected_streaming_services: newServices };
     });
     // Clear specific service error if any, when a service is selected/deselected
-    if (recommendationError && recommendationError.includes('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'service'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')) {
+    if (recommendationError && recommendationError.includes('service')) {
         setRecommendationError(null);
     }
   };
@@ -121,14 +121,14 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
           selected_streaming_services: prev.selected_streaming_services.length === available_services.length ? [] : allServiceNames
       }));
       // Clear specific service error if any, when services are toggled
-      if (recommendationError && recommendationError.includes('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'service'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')) {
+      if (recommendationError && recommendationError.includes('service')) {
         setRecommendationError(null);
       }
   }, [available_services, recommendationError]);
 
    const handleClearAllPreferences = useCallback(() => {
     setPreferences({
-      content_type: '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Both'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"',
+      content_type: 'Both',
       selected_mood: null,
       selected_genres: [],
       selected_streaming_services: [],
@@ -156,8 +156,8 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
         const response = await axios.post<RecommendationResponse>(`${API_BASE_URL}/recommendations`, request);
         return response.data;
       } catch (error: any) {
-        console.error('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Error fetching recommendation:'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', error);
-        let errorMessage = '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Failed to get recommendation. Please try again.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+        console.error('Error fetching recommendation:', error);
+        let errorMessage = 'Failed to get recommendation. Please try again.';
         if (axios.isAxiosError(error) && error.response) {
           errorMessage = error.response.data?.message || `API Error: ${error.message} (Status: ${error.response.status})`;
         } else if (error instanceof Error) {
@@ -199,12 +199,12 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
       }
 
       try {
-        // Corrected key name from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'sessionId'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' to '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'session_id'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' as per API spec
+        // Corrected key name from 'sessionId' to 'session_id' as per API spec
         const response = await axios.post<RecommendationResponse>(`${API_BASE_URL}/recommendations/regenerate`, { session_id: sessionId });
         return response.data;
       } catch (error: any) {
-        console.error('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Error regenerating recommendation:'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', error);
-        let errorMessage = '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Failed to get another recommendation. Please try again.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+        console.error('Error regenerating recommendation:', error);
+        let errorMessage = 'Failed to get another recommendation. Please try again.';
          if (axios.isAxiosError(error) && error.response) {
             errorMessage = error.response.data?.message || `API Error: ${error.message} (Status: ${error.response.status})`;
          } else if (error instanceof Error) {
@@ -231,19 +231,19 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
 
   const handleGetRecommendation = useCallback(() => {
     if (!session_id) {
-      setRecommendationError('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Session not available. Please refresh the page.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
+      setRecommendationError('Session not available. Please refresh the page.');
       return;
     }
     if (!preferences.selected_mood) {
-        setRecommendationError('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Please select a mood.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
+        setRecommendationError('Please select a mood.');
         return;
     }
       if (preferences.selected_genres.length === 0) {
-        setRecommendationError('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Please select at least one genre.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
+        setRecommendationError('Please select at least one genre.');
         return;
     }
       if (preferences.selected_streaming_services.length === 0) {
-        setRecommendationError('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Please select at least one streaming service.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
+        setRecommendationError('Please select at least one streaming service.');
         return;
     }
 
@@ -261,7 +261,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
 
   const handleRegenerateRecommendation = useCallback(() => {
     if (!session_id) {
-      setRecommendationError('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Session ID is missing. Cannot regenerate.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
+      setRecommendationError('Session ID is missing. Cannot regenerate.');
       return;
     }
     regenerateRecommendationMutation.mutate({ sessionId: session_id }); // Pass session_id matching mutation parameter name
@@ -319,14 +319,14 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
               <div className="mb-6">
                 <label className="block text-lg font-medium text-gray-700 mb-2">Content Type</label>
                 <div className="flex space-x-4">
-                  {['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Movie'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'TV Show'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Both'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'].map((type) => (
+                  {['Movie', 'TV Show', 'Both'].map((type) => (
                     <button
                       key={type}
                       onClick={() => handleContentTypeChange(type as ContentType)}
                       className={`px-5 py-2 rounded-full border transition-colors duration-150
                         ${preferences.content_type === type
-                          ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-blue-500 text-white border-blue-500 shadow-md'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
-                          : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-gray-200 text-gray-700 border-gray-300 hover:bg-gray-300'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
+                          ? 'bg-blue-500 text-white border-blue-500 shadow-md'
+                          : 'bg-gray-200 text-gray-700 border-gray-300 hover:bg-gray-300'
                         }`}
                     >
                       {type}
@@ -345,8 +345,8 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
                       onClick={() => handleMoodChange(mood.mood_name)}
                       className={`px-4 py-2 rounded-lg transition-colors duration-150 border
                         ${preferences.selected_mood === mood.mood_name
-                          ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-blue-100 border-blue-400 text-blue-800 font-semibold'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
-                          : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
+                          ? 'bg-blue-100 border-blue-400 text-blue-800 font-semibold'
+                          : 'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       {mood.mood_name}
@@ -363,8 +363,8 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
                       onClick={handleSelectAllServices}
                       className={`px-4 py-2 rounded-lg transition-colors duration-150 border font-medium
                         ${preferences.selected_streaming_services.length === available_services.length && available_services.length > 0
-                          ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-gray-300 border-gray-400 text-gray-800 cursor-not-allowed'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' // Indicate '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'All'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' is selected
-                          : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
+                          ? 'bg-gray-300 border-gray-400 text-gray-800 cursor-not-allowed'
+                          : 'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       {preferences.selected_streaming_services.length === available_services.length && available_services.length > 0 ? "All Selected" : "Select All"}
@@ -375,8 +375,8 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
                       onClick={() => handleServiceChange(service.service_name)}
                       className={`px-4 py-2 rounded-lg transition-colors duration-150 border flex items-center justify-center
                         ${preferences.selected_streaming_services.includes(service.service_name)
-                          ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-blue-100 border-blue-400 text-blue-800 font-semibold'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
-                          : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
+                          ? 'bg-blue-100 border-blue-400 text-blue-800 font-semibold'
+                          : 'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                        {service.service_name}
@@ -395,8 +395,8 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
                       onClick={() => handleGenreChange(genre.genre_name)}
                       className={`px-4 py-2 rounded-lg transition-colors duration-150 border text-sm
                         ${preferences.selected_genres.includes(genre.genre_name)
-                          ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-blue-500 text-white border-blue-600 font-medium shadow-sm'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
-                          : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'
+                          ? 'bg-blue-500 text-white border-blue-600 font-medium shadow-sm'
+                          : 'bg-gray-50 border-gray-300 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       {genre.genre_name}
@@ -430,7 +430,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
               <button
                 onClick={handleGetRecommendation}
                 disabled={!isInitialDataReady || !isPreferenceFormComplete}
-                className={`px-8 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150 w-full sm:w-auto ${(!isInitialDataReady || !isPreferenceFormComplete) ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"''"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'hover:animate-none focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}`}
+                className={`px-8 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150 w-full sm:w-auto ${(!isInitialDataReady || !isPreferenceFormComplete) ? '' : 'hover:animate-none focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75'}`}
               >
                 Find My Watch
               </button>
@@ -452,7 +452,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
                   onError={(e) => {
                     // Basic error handling for image loading itself
                     e.currentTarget.onerror = null; // Prevent infinite loop
-                    e.currentTarget.src = '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'/fallback-poster.png'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'; // Use a specified fallback asset if available
+                    e.currentTarget.src = '/fallback-poster.png'; // Use a specified fallback asset if available
                   }}
                 />
               </div>
@@ -462,10 +462,10 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
                 </p>
                 <div className="mb-4 text-sm text-gray-800">
                   <span className="font-semibold text-gray-900">Content Type:</span> {recommendationResult.content_type}
-                  {recommendationResult.content_type === '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Movie'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' && recommendationResult.runtime_minutes !== null && (
+                  {recommendationResult.content_type === 'Movie' && recommendationResult.runtime_minutes !== null && (
                     ` (${recommendationResult.runtime_minutes} mins)`
                   )}
-                  {recommendationResult.content_type === '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'TV Show'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' && recommendationResult.seasons_count !== null && (
+                  {recommendationResult.content_type === 'TV Show' && recommendationResult.seasons_count !== null && (
                     ` (${recommendationResult.seasons_count} seasons)`
                   )}
                 </div>
@@ -478,10 +478,10 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
                     </div>
                  )}
                 <div className="mb-4 text-sm text-gray-800">
-                  <span className="font-semibold text-gray-900">Genres:</span> {recommendationResult.genres.join('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')}
+                  <span className="font-semibold text-gray-900">Genres:</span> {recommendationResult.genres.join(', ')}
                 </div>
                 <div className="text-sm text-gray-800">
-                  <span className="font-semibold text-gray-900">Available On:</span> {recommendationResult.streaming_services.join('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')}
+                  <span className="font-semibold text-gray-900">Available On:</span> {recommendationResult.streaming_services.join(', ')}
                 </div>
               </div>
             </div>
@@ -518,7 +518,7 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
         {!isAnyLoading && !displayError && !recommendationResult && recommendationMessage?.includes("No suitable") && (
               <div className="mt-10 bg-yellow-50 border border-yellow-300 text-yellow-800 px-4 py-3 rounded relative w-full max-w-md text-center">
                   <p className="font-semibold">No Matches Found!</p>
-                  <p>We couldn'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'t find a perfect match with your current selections.</p>
+                  <p>We couldn't find a perfect match with your current selections.</p>
                   <p className="mt-2">Try broadening your search criteria or selecting different options.</p>
               </div>
         )}
@@ -528,10 +528,3 @@ const UV_001_MainPreferenceInputForm: React.FC = () => {
 };
 
 export default UV_001_MainPreferenceInputForm;
-
-
-
-
-
-
-

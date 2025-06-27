@@ -1,11 +1,11 @@
-import React from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'react'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
-import { Link } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'react-router-dom'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * UV_004: No Matching Recommendations Found View Component
  *
  * This component is displayed when the recommendation engine cannot find any
- * suitable content based on the user'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'s current input criteria. It provides
+ * suitable content based on the user's current input criteria. It provides
  * an informative message and guidance on how to refine the search.
  */
 const UV_004: React.FC = () => {
@@ -40,7 +40,7 @@ const UV_004: React.FC = () => {
 
           {/* Informative Message */}
           <p className="text-lg mb-6 text-gray-600">
-            We couldn'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'t find a perfect match for your current selections.
+            We couldn't find a perfect match for your current selections.
           </p>
 
           {/* Guidance for Refinement */}
@@ -52,7 +52,7 @@ const UV_004: React.FC = () => {
           <div className="mt-6">
             <Link 
               to="/" 
-              className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 ease-in-out w-full max-w-[250px]"
+              className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-7 00 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 ease-in-out w-full max-w-[250px]"
             >
               Refine Your Search
             </Link>
@@ -61,8 +61,7 @@ const UV_004: React.FC = () => {
 
         {/* Footer or additional space if needed */}
         <footer className="mt-12 text-sm text-gray-400">
-          {/* Potentially display current session ID for debugging, if that'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'s a requirement */}
-          {/* Example: Session ID: {useAppStore(state => state.session_id)} */}
+          {/* Potentially display current session ID for debugging */}
         </footer>
 
       </div>
@@ -71,10 +70,3 @@ const UV_004: React.FC = () => {
 };
 
 export default UV_004;
-
-
-
-
-
-
-

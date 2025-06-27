@@ -1,23 +1,31 @@
-# Use Node.js LTS version
-FROM node:18-alpine
+# Stage 1: Build the Vite React frontend
+FROM node:18 AS frontend-build
+WORKDIR /app/vitereact
+# Copy package files and install dependencies with --legacy-peer-deps
+COPY vitereact/package.json  ./
+RUN npm install --legacy-peer-deps
+RUN npm install --save-dev eslint-plugin-import eslint-plugin-react @typescript-eslint/parser @typescript-eslint/eslint-plugin
+RUN npm install --save-dev eslint-import-resolver-typescript
+# Copy the rest of the frontend files and build
+COPY vitereact ./
 
-# Set working directory
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --only=production
-
-# Copy source code
-COPY . .
-
-# Build the application
 RUN npm run build
 
-# Expose port
+# Stage 2: Set up the Node.js backend
+FROM node:18
+WORKDIR /app/backend
+# Copy package files and install production dependencies
+COPY backend/package.json  ./
+# Install dependencies
+RUN npm install --production
+# Copy the backend files
+COPY backend ./
+# Copy the frontend build output to a directory served by the backend
+COPY --from=frontend-build /app/vitereact/public /app/backend/public
+# Expose the port the backend will run on
 EXPOSE 3000
-
-# Start the application
-CMD ["npm", "start"]
+# Set environment variables
+ENV PORT=3000
+ENV HOST=0.0.0.0
+# Command to start the backend server - make sure it listens on all interfaces
+CMD ["sh", "-c", "node initdb.js && NODE_ENV=production node server.js"]

@@ -1,19 +1,17 @@
-import React from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'react'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
-import { Link } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'react-router-dom'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'; // Used for implicit navigation back to the input form perhaps
-import { useMutation, useQueryClient } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@tanstack/react-query'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
-import axios from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'axios'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
-import { v4 as uuidv4 } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'uuid'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 // Import types and store interfaces
-import { useAppStore } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@/store/main'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
-import type { ContentDetails, RecommendationResponse, RegenerateRequest } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@/store/main'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'; // Import types directly from store
+import { useAppStore } from '@/store/main';
+import type { ContentDetails, RecommendationResponse, RegenerateRequest } from '@/store/main';
 
 // --- Environment Variables ---
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'http://localhost:3000'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}`;
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}`;
 
 // --- API Fetching Function ---
-// This function is for API calls made by mutations or potentially by parent components.
-// UV_002 itself should not fetch initial data.
 interface RegenerateRequestPayload {
   session_id: string;
 }
@@ -27,15 +25,13 @@ const fetch_regenerate_recommendation = async (requestData: RegenerateRequestPay
 };
 
 // --- UV_002 Component Definition ---
-// This component is designed as a PRESENTATIONAL component.
-// It receives the recommendation data and a handler for the '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Get Another'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' button via props.
 interface UV_002Props {
   contentDetails: ContentDetails | null;
   onRegenerate: (sessionId: string) => void;
   isLoadingRegenerate: boolean;
   regenerateError: string | null;
-  isInitialLoad: boolean; // To signal if the initial recommendation is still loading
-  initialLoadError: string | null; // To signal if initial recommendation failed
+  isInitialLoad: boolean;
+  initialLoadError: string | null;
 }
 
 const UV_002: React.FC<UV_002Props> = ({
@@ -49,7 +45,7 @@ const UV_002: React.FC<UV_002Props> = ({
 
   // Helper to format runtime
   const format_runtime = (minutes: number | null | undefined): string => {
-    if (minutes === null || minutes === undefined) return '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'N/A'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'; // Provide a placeholder
+    if (minutes === null || minutes === undefined) return 'N/A';
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
@@ -73,11 +69,11 @@ const UV_002: React.FC<UV_002Props> = ({
       <div className="text-center p-8 font-medium text-gray-600">
         <p className="text-red-500 text-lg font-semibold mb-4">{initialLoadError}</p>
         <button 
-          onClick={() => onRegenerate(localStorage.getItem('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'session_id'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"') || '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"''"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')} 
+          onClick={() => onRegenerate(localStorage.getItem('session_id') || '')} 
           disabled={isLoadingRegenerate} 
           className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoadingRegenerate ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Trying Again...'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Try Loading Again'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}
+          {isLoadingRegenerate ? 'Trying Again...' : 'Try Loading Again'}
         </button>
       </div>
     );
@@ -119,18 +115,17 @@ const UV_002: React.FC<UV_002Props> = ({
             src={safePosterUrl}
             alt={`Poster for ${title}`}
             onError={(e) => {
-              // Prevent infinite loop and use a fallback
               e.currentTarget.onerror = null;
-              e.currentTarget.src = `https://picsum.photos/seed/${encodeURIComponent(title)}/600/800`; // Fallback fallback!
+              e.currentTarget.src = `https://picsum.photos/seed/${encodeURIComponent(title)}/600/800`;
             }}
           />
         </div>
         <div className="p-8">
           <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{content_type}</div>
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">{title}</h1>
-          <p className="mt-2 text-slate-500 font-medium">{release_year} - {content_rating || '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'N/A'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}</p>
+          <p className="mt-2 text-slate-500 font-medium">{release_year} - {content_rating || 'N/A'}</p>
           <p className="mt-2 text-slate-500 font-medium">
-            {runtime_minutes !== null && runtime_minutes !== undefined ? format_runtime(runtime_minutes) : seasons_count !== null && seasons_count !== undefined ? `${seasons_count} Season(s)` : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'N/A'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}
+            {runtime_minutes !== null && runtime_minutes !== undefined ? format_runtime(runtime_minutes) : seasons_count !== null && seasons_count !== undefined ? `${seasons_count} Season(s)` : 'N/A'}
           </p>
 
           <div className="mt-4">
@@ -142,7 +137,7 @@ const UV_002: React.FC<UV_002Props> = ({
             <h3 className="text-lg font-semibold text-gray-800">Genres</h3>
             <div className="flex flex-wrap gap-2 mt-1">
               {genres.map((genre, index) => (
-                <span key={index /* Assumes genre names are unique enough here */ } className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                <span key={index} className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
                   {genre}
                 </span>
               ))}
@@ -153,7 +148,7 @@ const UV_002: React.FC<UV_002Props> = ({
             <h3 className="text-lg font-semibold text-gray-800">Available On</h3>
             <div className="flex flex-wrap gap-2 mt-1">
               {streaming_services.map((service, index) => (
-                <span key={index /* Assumes service names are unique enough here */ } className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                <span key={index} className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
                   {service}
                 </span>
               ))}
@@ -166,11 +161,11 @@ const UV_002: React.FC<UV_002Props> = ({
 
           <div className="mt-6 flex justify-center">
             <button
-              onClick={() => onRegenerate(localStorage.getItem('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'session_id'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"') || '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"''"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')} // Pass session_id from localStorage
+              onClick={() => onRegenerate(localStorage.getItem('session_id') || '')}
               disabled={isLoadingRegenerate}
               className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoadingRegenerate ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Getting Another...'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Get Another Recommendation'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}
+              {isLoadingRegenerate ? 'Getting Another...' : 'Get Another Recommendation'}
             </button>
           </div>
 
@@ -184,10 +179,3 @@ const UV_002: React.FC<UV_002Props> = ({
 };
 
 export default UV_002;
-
-
-
-
-
-
-

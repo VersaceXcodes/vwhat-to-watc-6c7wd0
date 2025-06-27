@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Using Link for navigation
-import axios from 'axios';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useState, useEffect } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'react'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+import { Link, useNavigate } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'react-router-dom'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'; // Using Link for navigation
+import axios from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'axios'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
+import { useQuery, useMutation, useQueryClient } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@tanstack/react-query'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
 
 // Import types from shared schemas
 import {
@@ -13,13 +13,13 @@ import {
   genresSchema, // For type hints if needed, though API response shape is more direct
   moodsSchema,
   streamingServicesSchema,
-} from '@schema';
+} from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@schema'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
 
 // Import from Zustand store
-import { useAppStore } from '@/store/main';
+import { useAppStore } from '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'@/store/main'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"';
 
 // --- Constants ---
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}`;
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'http://localhost:3000'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}`;
 
 // --- Interfaces for View-Specific Data Handling ---
 
@@ -50,52 +50,52 @@ const fetchUserProfile = async (): Promise<UserProfileData> => {
   // TODO: Endpoint not found in OpenAPI spec / Backend Server main code.
   // Assuming an endpoint like /users/me exists and returns user data
   // based on authentication token. Mocking for now.
-  console.warn('API Endpoint GET /users/me is not defined in OpenAPI spec. Using mock data.');
+  console.warn('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'API Endpoint GET /users/me is not defined in OpenAPI spec. Using mock data.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
 
   // Simulate API call if endpoint were available
   try {
     const response = await axios.get(`${API_BASE_URL}/users/me`); // Hypothetical endpoint
     return response.data as UserProfileData;
   } catch (error) {
-    // Mock response if the endpoint were available
+    // Mock response if the endpoint doesn'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'t exist or fails
     if (axios.isAxiosError<UserProfileData>(error) && error.response) {
       // Handle specific API errors if the endpoint existed
       throw new Error(`API Error fetching user profile: ${error.message} (Status: ${error.response.status})`);
     } else {
       // Mock data in case of network error or missing endpoint
-      console.error('Mocking user profile data due to missing API endpoint.');
+      console.error('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Mocking user profile data due to missing API endpoint.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
       return {
         user_id: 1, // Mock user ID
-        email: 'user@example.com', // Mock email
+        email: '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'user@example.com'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', // Mock email
       };
     }
   }
 };
 
-// Fetch for logged-in user's saved recommendations
+// Fetch for logged-in user'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'s saved recommendations
 // NOTE: Endpoint /users/me/saved-recommendations is NOT defined in the provided OpenAPI spec.
 const fetchUserSavedRecommendations = async (): Promise<UserSavedRecommendations[]> => {
   // TODO: Endpoint not found in OpenAPI spec / Backend Server main code.
   // Assuming an endpoint like /users/me/saved-recommendations exists and returns saved items.
-  console.warn('API Endpoint GET /users/me/saved-recommendations is not defined in OpenAPI spec. Using mock data.');
+  console.warn('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'API Endpoint GET /users/me/saved-recommendations is not defined in OpenAPI spec. Using mock data.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
 
   // Simulate API call if endpoint were available
   try {
     const params: SearchUserSavedRecommendationsInput = {
       limit: 100, // Fetch all for simplicity in MVP
-      sort_by: 'saved_at', // Assuming sort_by is a string
-      sort_order: 'desc', // Assuming sort_order is a string
+      sort_by: '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'saved_at'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"',
+      sort_order: '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'desc'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"',
     };
     const response = await axios.get<any>(`${API_BASE_URL}/users/me/saved-recommendations`, { params }); // Hypothetical endpoint
     return response.data.user_saved_recommendations || []; // Assuming response structure { user_saved_recommendations: UserSavedRecommendations[] }
   } catch (error) {
-    // Mock data in case of network error or missing endpoint
-    console.error('Mocking saved recommendations due to missing API endpoint.');
-    // Ensure mock data conforms to UserSavedRecommendations interface, including content_id
-    return [
-      { user_saved_id: 1, user_id: 1, content_id: 101, saved_at: new Date().toISOString(), source_criteria: { mood: 'Amused' } },
-      { user_saved_id: 2, user_id: 1, content_id: 102, saved_at: new Date(Date.now() - 86400000).toISOString(), source_criteria: { genres: ['Sci-Fi'] } },
-    ];
+     // Mock data in case of network error or missing endpoint
+     console.error('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Mocking saved recommendations due to missing API endpoint.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
+     // Ensure mock data conforms to UserSavedRecommendations interface, including content_id
+     return [
+       { user_saved_id: 1, user_id: 1, content_id: 101, saved_at: new Date().toISOString(), source_criteria: { mood: '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Amused'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' } },
+       { user_saved_id: 2, user_id: 1, content_id: 102, saved_at: new Date(Date.now() - 86400000).toISOString(), source_criteria: { genres: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Sci-Fi'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'] } },
+     ];
   }
 };
 
@@ -118,13 +118,13 @@ const fetchContentDetailsById = async (content_id: number): Promise<ContentDetai
       title: `Mocked Content Title ${content_id}`,
       synopsis: `This is a mocked synopsis for content ID ${content_id}. The actual synopsis would be fetched from the API.`,
       poster_url: `https://picsum.photos/seed/${content_id}/200/300`,
-      content_type: content_id % 2 === 0 ? 'Movie' : 'TV Show',
+      content_type: content_id % 2 === 0 ? '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Movie'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"' : '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'TV Show'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"',
       runtime_minutes: content_id % 2 === 0 ? 120 : null,
       seasons_count: content_id % 2 !== 0 ? 5 : null,
       release_year: 2000 + (content_id % 20),
-      content_rating: ['G', 'PG', 'PG-13', 'R', 'TV-Y7', 'TV-MA'][content_id % 6] || null,
-      genres: ['Action', 'Comedy'][content_id % 2] || ['Drama'],
-      streaming_services: ['Netflix', 'Hulu'][content_id % 3] || ['Prime Video'],
+      content_rating: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'G'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'PG'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'PG-13'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'R'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'TV-Y7'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'TV-MA'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'][content_id % 6] || null,
+      genres: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Action'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Comedy'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'][content_id % 2] || ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Drama'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'],
+      streaming_services: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Netflix'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Hulu'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'][content_id % 3] || ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Prime Video'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'],
     };
   }
 };
@@ -156,10 +156,10 @@ const UV_005: React.FC = () => {
   const userId = useAppStore(state => {
      // For profile view, we typically need authenticated user info from the store.
      // If the store holds user data (e.g., state.currentUser), use it.
-     // If not, we'll rely on fetchUserProfile.
-     // For a robust MVP+, you'd check auth status here.
+     // If not, we'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'ll rely on fetchUserProfile.
+     // For a robust MVP+, you'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'d check auth status here.
      // For now, we proceed assuming user is logged in and fetchUserProfile will get details.
-     return state.session_id; // Using session_id as a proxy for logged-in state for now if user isn't stored directly
+     return state.session_id; // Using session_id as a proxy for logged-in state for now if user isn'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'t stored directly
   });
 
   const [allSavedContentDetails, setAllSavedContentDetails] = useState<{ [key: number]: ContentDetails }>({});
@@ -173,7 +173,7 @@ const UV_005: React.FC = () => {
     isError: isErrorProfile,
     error: errorProfile,
   } = useQuery<UserProfileData, Error>({
-    queryKey: ['userProfile'],
+    queryKey: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'userProfile'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'],
     queryFn: fetchUserProfile,
     enabled: !!userId, // Only fetch if userId is available
     onError: (err) => {
@@ -182,14 +182,14 @@ const UV_005: React.FC = () => {
     },
   });
 
-  // Fetch User's Saved Recommendations (list of UserSavedRecommendations)
+  // Fetch User'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'s Saved Recommendations (list of UserSavedRecommendations)
   const {
     data: savedRecommendationsList,
     isLoading: isLoadingSavedRecs,
     isError: isErrorSavedRecs,
     error: errorSavedRecs,
   } = useQuery<UserSavedRecommendations[], Error>({
-    queryKey: ['userSavedRecommendations'],
+    queryKey: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'userSavedRecommendations'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'],
     queryFn: fetchUserSavedRecommendations,
     enabled: !!userId, // Only fetch if userId is available
     onSuccess: (data) => {
@@ -250,7 +250,7 @@ const UV_005: React.FC = () => {
     onMutate: async (deletedUserSavedId) => {
       // Optimistically update the UI: Remove the item from the displayed list
       queryClient.setQueryData<UserSavedRecommendations[]>(
-        ['userSavedRecommendations'],
+        ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'userSavedRecommendations'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'],
         (oldData) => oldData?.filter(item => item.user_saved_id !== deletedUserSavedId) ?? []
       );
 
@@ -271,18 +271,18 @@ const UV_005: React.FC = () => {
       });
 
       // Note: The actual removal from the UI happens when the query invalidation succeeds.
-      // For immediate visual feedback, we've updated the cache.
+      // For immediate visual feedback, we'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'ve updated the cache.
     },
     onSuccess: () => {
-      console.log('Saved recommendation removed successfully.');
+      console.log('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Saved recommendation removed successfully.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"');
       // Data is already optimistically updated, but explicit invalidation is good practice.
-      queryClient.invalidateQueries({ queryKey: ['userSavedRecommendations'] });
+      queryClient.invalidateQueries({ queryKey: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'userSavedRecommendations'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'] });
       // No need to re-fetch content details explicitly if they are managed separately in state `allSavedContentDetails` and cleared by `onMutate`
     },
     onError: (error, variables) => {
-      console.error('Failed to remove saved recommendation:', error);
+      console.error('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'Failed to remove saved recommendation:'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', error);
       // Revert optimistic update if mutation fails
-      queryClient.invalidateQueries({ queryKey: ['userSavedRecommendations'] }); // This will refetch the original data
+      queryClient.invalidateQueries({ queryKey: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'userSavedRecommendations'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'] }); // This will refetch the original data
       // Inform the user about the error
       alert(`Could not remove item. Please try again. Error: ${error.message}`);
     },
@@ -292,7 +292,7 @@ const UV_005: React.FC = () => {
   const handleLogout = () => {
     // Call logout action from Zustand store
     logout();
-    navigate('/'); // Redirect to homepage or login page after logout
+    navigate('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'/'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'); // Redirect to homepage or login page after logout
   };
 
   const isLoading = isLoadingProfile || isLoadingSavedRecs || mutationRemoveSaved.isPending;
@@ -346,9 +346,9 @@ const UV_005: React.FC = () => {
           {isError && (
             <div className="text-center py-10">
               <p className="text-red-500 text-lg font-semibold">Error Loading Profile:</p>
-              <p className="text-red-400 text-base">{errorMessage || '"An unknown error occurred."'}</p>
+              <p className="text-red-400 text-base">{errorMessage || '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'An unknown error occurred.'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'}</p>
               <button
-                onClick={() => queryClient.refetchQueries({ queryKey: ['userProfile', 'userSavedRecommendations'] })}
+                onClick={() => queryClient.refetchQueries({ queryKey: ['"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'userProfile'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'userSavedRecommendations'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'] })}
                 className="mt-4 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white font-medium transition duration-200"
               >
                 Retry
@@ -398,7 +398,7 @@ const UV_005: React.FC = () => {
                             <div>
                               <h3 className="text-lg font-bold text-white mb-2 truncate">{content.title} ({content.release_year})</h3>
                               <p className="text-xs text-gray-300 mb-1">
-                                {content.content_type} | {content.genres.join(', ')}
+                                {content.content_type} | {content.genres.join('"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"', '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"')}
                               </p>
                               <p className="text-xs text-gray-400 mb-3">Saved: {new Date(savedItem.saved_at).toLocaleDateString()}</p>
                               {/* Optionally show synopsis snippet or more details link */}
@@ -434,7 +434,7 @@ const UV_005: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-center py-10">
-                    <p className="text-gray-500 text-lg">You haven't saved any recommendations yet.</p>
+                    <p className="text-gray-500 text-lg">You haven'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'t saved any recommendations yet.</p>
                     <Link to="/" className="mt-4 inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white font-medium transition duration-200">
                       Start Discovering
                     </Link>
@@ -450,3 +450,10 @@ const UV_005: React.FC = () => {
 };
 
 export default UV_005;
+
+
+
+
+
+
+

@@ -1,7 +1,6 @@
 import React, { useEffect, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // Views
 import UV_001 from '@/components/views/UV_001';
@@ -28,13 +27,13 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: any) {
-    console.error('"'"'Uncaught error:'"'"', error, errorInfo);
+    console.error('"'"'"'"'"'"'"'"'Uncaught error:'"'"'"'"'"'"'"'"', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: '"'"'20px'"'"', color: '"'"'red'"'"' }}>
+        <div style={{ padding: '"'"'"'"'"'"'"'"'20px'"'"'"'"'"'"'"'"', color: '"'"'"'"'"'"'"'"'red'"'"'"'"'"'"'"'"' }}>
           <h2>Something went wrong.</h2>
           <p>{this.state.error?.message}</p>
           <button onClick={() => window.location.reload()}>Reload App</button>
@@ -51,12 +50,12 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       onError: (error) => {
-        console.error('"'"'Global Query Error:'"'"', error);
+        console.error('"'"'"'"'"'"'"'"'Global Query Error:'"'"'"'"'"'"'"'"', error);
       },
     },
     mutations: {
       onError: (error) => {
-        console.error('"'"'Global Mutation Error:'"'"', error);
+        console.error('"'"'"'"'"'"'"'"'Global Mutation Error:'"'"'"'"'"'"'"'"', error);
       },
     },
   },
@@ -65,13 +64,13 @@ const queryClient = new QueryClient({
 // --- App Component ---
 const App: React.FC = () => {
   useEffect(() => {
-    console.log('"'"'App component mounted, potentially performing initial setup.'"'"');
+    console.log('"'"'"'"'"'"'"'"'App component mounted, potentially performing initial setup.'"'"'"'"'"'"'"'"');
   }, []);
 
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        {process.env.NODE_ENV === '"'"'development'"'"' && <ReactQueryDevtools initialIsOpen={false} />}
+        {process.env.NODE_ENV === '"'"'"'"'"'"'"'"'development'"'"'"'"'"'"'"'"' && <ReactQueryDevtools initialIsOpen={false} />}
 
         <ErrorBoundary>
           <Suspense fallback={<div>Loading...</div>}>
